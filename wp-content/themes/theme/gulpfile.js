@@ -2,13 +2,18 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     browserSync = require('browser-sync'),
     csso = require('gulp-csso'),
+    autoprefixer=require('gulp-autoprefixer'),
     rename = require('gulp-rename'),
-    uglify = require('gulp-uglifyjs'); //(для сжатия JS)
-
+    uglify = require('gulp-uglifyjs'), //(для сжатия JS)
+    del = require('del'),
+    imagemin = require('gulp-imagemin'),
+    pngquant = require('imagemin-pngquant'),
+    cache = require('gulp-cache');
 
 gulp.task('sass', function () {
     return gulp.src('source/sass/main.sass')
         .pipe(sass())
+        .pipe(autoprefixer(['last 15 versions','> 1%','ie 8','ie 7'],{cascade:true}))
         .pipe(gulp.dest('css'))
         .pipe(csso())
         .pipe(rename('main-min.css'))
@@ -18,6 +23,7 @@ gulp.task('sass', function () {
 
 gulp.task('css-libs', function () {
     return gulp.src('css/main.css')
+        .pipe(autoprefixer(['last 15 versions','> 1%','ie 8','ie 7']))
         .pipe(csso())
         .pipe(rename('main-min.css'))
         .pipe(gulp.dest('css'))
@@ -31,14 +37,29 @@ gulp.task('scripts', function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('img', function () {
+    return gulp.src('source/img/**/*')
+        .pipe(cache(imagemin({
+            interlaced: true,
+            progressive: true,
+            svgoPlugins: [{removeViewBox: false}],
+            use: [pngquant()]
+        })))
+        .pipe(gulp.dest('img'));
+});
+
 gulp.task('browser-sync', function () {
     browserSync.init({
         // server: {
         //     baseDir: './'
         // },
-        proxy: 'odysseyofthemind.loc/wp-content/theme',
+        proxy: 'odysseyofthemind.loc/',
         notify: false
     });
+});
+
+gulp.task('clear', function () {
+    return cache.clearAll();
 });
 
 gulp.task('watch', ['browser-sync', 'sass', 'scripts'], function () {
