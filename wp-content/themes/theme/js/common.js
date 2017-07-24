@@ -1,1 +1,1 @@
-$(function(){});
+$(function(){$(".flexslider").flexslider({animation:"slide",directionNav:!1}),$(".flex").fadeIn("slow")});

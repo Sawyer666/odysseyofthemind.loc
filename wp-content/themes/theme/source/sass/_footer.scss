@@ -1,0 +1,16 @@
+
+.hFooter { /* это распорка в основном блоке - резервируем место для подвала */
+  height: 65px; /* высота подвала */
+  clear: both;
+  background-color: rgb(196, 224, 229);
+}
+
+.footer {
+  max-width: 1170px;
+  text-align: center;
+  font-size: 16px;
+  margin: 0 auto;
+  margin-top: -60px;
+  height: 60px;
+  background-color: rgb(196, 224, 229);
+}

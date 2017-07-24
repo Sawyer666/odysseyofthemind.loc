@@ -11,13 +11,13 @@ var gulp = require('gulp'),
     cache = require('gulp-cache');
 
 gulp.task('sass', function () {
-    return gulp.src('source/sass/main.sass')
+    return gulp.src('source/sass/main.scss')
         .pipe(sass())
         .pipe(autoprefixer(['last 15 versions','> 1%','ie 8','ie 7'],{cascade:true}))
         .pipe(gulp.dest('css'))
-        .pipe(csso())
-        .pipe(rename('main-min.css'))
-        .pipe(gulp.dest('css'))
+        // .pipe(csso())
+        // .pipe(rename('main-min.css'))
+        // .pipe(gulp.dest('css'))
         .pipe(browserSync.reload({stream: true}));
 });
 
@@ -38,7 +38,7 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('img', function () {
-    return gulp.src('source/img/**/*')
+    return gulp.src('source/img/slides/*')
         .pipe(cache(imagemin({
             interlaced: true,
             progressive: true,
@@ -63,8 +63,8 @@ gulp.task('clear', function () {
 });
 
 gulp.task('watch', ['browser-sync', 'sass', 'scripts'], function () {
-    gulp.watch('source/sass/**/*.sass', ['sass']);//Gulp наблюдает за всеми sass файлами и при сохранении выполняет таск sass, который автоматически компилирует их в css файлы.
+    gulp.watch('source/sass/**/*.scss', ['sass']);//Gulp наблюдает за всеми sass файлами и при сохранении выполняет таск sass, который автоматически компилирует их в css файлы.
     gulp.watch('css/**/*.css', ['css-libs']);
     gulp.watch('source/js/common.js', ['scripts']);
-    gulp.watch('*.php', browserSync.reload);
+    gulp.watch('**/*.php', browserSync.reload);
 });
